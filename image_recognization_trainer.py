@@ -20,7 +20,9 @@ new_X_test /= 255
 new_y_train = np_utils.to_categorical(y_train)
 new_y_test = np_utils.to_categorical(y_test)
 
+#creating model
 model = Sequential()
+#adding layers to images
 model.add(Conv2D(32, (3, 3), input_shape=(32, 32, 3), activation='relu', padding='same', kernel_constraint=maxnorm(3)))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Flatten())
@@ -28,8 +30,11 @@ model.add(Dense(512, activation='relu', kernel_constraint=maxnorm(3)))
 model.add(Dropout(0.5))
 model.add(Dense(10, activation='softmax'))
 
+#model calculates loss and accuracy of itself by predicting each image's category and learns from it
 model.compile(loss='categorical_crossentropy',optimizer=SGD(lr=0.01), metrics=['accuracy'])
 
+#model gets through all the images 10 times for better accuracy
 model.fit(new_X_train, new_y_train, epochs=10, batch_size=32)
 
+#learned model
 model.save('Trained_model.h5')
